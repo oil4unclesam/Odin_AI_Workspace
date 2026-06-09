@@ -40,7 +40,7 @@ import logging
 import secrets
 from datetime import datetime
 from typing import Dict
-
+from src.telemetry import start_background_telemetry
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse, FileResponse, HTMLResponse
