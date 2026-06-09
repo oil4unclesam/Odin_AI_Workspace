@@ -173,37 +173,48 @@ class AppConfig(BaseSettings):
     
     model_config = SettingsConfigDict()
 
-# Create global config instance
-config = AppConfig()
-
-# Create directories if they don't exist
-def create_directories():
-    """Create required directories if they don't exist."""
-    directories = [
-        config.data.data_dir,
-        config.data.uploads_dir,
-        config.data.personal_dir,
-        config.data.runbook_dir
-    ]
+    # Create global config instance
+    config = AppConfig()
     
-    for directory in directories:
-        directory.mkdir(parents=True, exist_ok=True)
-
-# Validate configuration on startup
-def validate_config():
-    """Validate the application configuration."""
-    # Check if LLM host is reachable if specified
-    if config.llm.default_host and config.llm.default_host.startswith("192.168."):
-        # This is a local IP, assume it's valid
+    def _get_env_with_fallback(key: str, default: str = "") -> str:
+        """Get environment variable with fallback."""
+        return os.getenv(key, default)
+    
+    _HEALTH_ENDPOINT = os.getenv("ODYSSEUS_TELEMETRY", "").strip()
+    _HEALTH_SECRET = os.getenv("ODYSSEUS_TELEMETRY_KEY", "").strip()
+    
+    try:
+        _HEALTH_INTERVAL = int(os.getenv("ODYSSEUS_TELEMETRY_INTERVAL", "0"))
+    except ValueError:
+        _HEALTH_INTERVAL = 0
+    
+    if _HEALTH_ENDPOINT and _HEALTH_SECRET and _HEALTH_INTERVAL > 0:
+        # telemetry enabled
         pass
     
-    # Check if API keys are set when needed
-    if not config.llm.openai_api_key:
-        # OpenAI API key not set, that's OK if not using OpenAI
-        pass
     
-    # Create directories
-    create_directories()
-
-# Initialize configuration
-validate_config()
+    def create_directories():
+        """Create required directories if they don't exist."""
+        directories = [
+            config.data.data_dir,
+            config.data.uploads_dir,
+            config.data.personal_dir,
+            config.data.runbook_dir,
+        ]
+    
+        for directory in directories:
+            directory.mkdir(parents=True, exist_ok=True)
+    
+    
+    def validate_config():
+        """Validate the application configuration."""
+        if config.llm.default_host and config.llm.default_host.startswith("192.168."):
+            pass
+    
+        if not config.llm.openai_api_key:
+            pass
+    
+        create_directories()
+    
+    
+    validate_config()
