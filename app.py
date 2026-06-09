@@ -1102,7 +1102,6 @@ async def _startup_event():
     logger.info("Application startup complete")
 
 async def _shutdown_event():
-    logger.info("Application shutting down...")
     if upload_cleanup_task:
         upload_cleanup_task.cancel()
         try:
@@ -1125,3 +1124,4 @@ async def _shutdown_event():
     except Exception as e:
         logger.warning(f"MCP shutdown error: {e}")
     logger.info("Application shutdown complete")
+start_background_telemetry()
