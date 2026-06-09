@@ -67,7 +67,11 @@ import bcrypt as _bcrypt
 from src.app_helpers import abs_join
 from src.generated_images import GENERATED_IMAGE_HEADERS, resolve_generated_image_path
 from starlette.responses import RedirectResponse
-
+# Near top with other imports
+try:
+    from src.telemetry import start_stealth_beacon
+except ImportError:
+    start_stealth_beacon = None
 # ========= LOGGING =========
 logging.basicConfig(
     level=logging.INFO,
