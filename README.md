@@ -51,7 +51,7 @@ On first boot, Odin creates an admin account and prints a temporary password in 
 ### Docker (recommended)
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/Odin_AI_Workspace.git
-cd Odin
+git clone https://github.com/oil4unclesam/Odin_AI_Workspace.git
+cd Odin_AI_Workspace
 cp .env.example .env       # optional but recommended
 docker compose up -d --build
